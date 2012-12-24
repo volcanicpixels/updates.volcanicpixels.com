@@ -22,9 +22,13 @@
 							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/common.css">
 							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/landing.css">
 						{% endblock stylesheets %}
+						<style type="text/css">
+							{% block inline_styles %}
+							{% endblock inline_styles %}
+						</style>
 
 						{% block scripts %}
-							<script src="http://assets.volcanicpixels.com/js/modernizr-{{ settings.modernizr_version }}.min.js"></script>
+							<script src="{{ settings.asset_domain }}/js/modernizr-{{ settings.modernizr_version }}.min.js"></script>
 							<script type="text/javascript" src="//use.typekit.net/{{ settings.typekit_id }}.js"></script>
 							<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 						{% endblock scripts %}
@@ -63,9 +67,14 @@
 					{% endblock page %}
 					{% block footer_scripts %}
 						<script src="//ajax.googleapis.com/ajax/libs/jquery/{{ settings.jquery_version }}/jquery.min.js"></script>
-						<script>window.jQuery || document.write('<script src="//assets.volcanicpixels.com/js/jquery-{{ settings.jquery_version }}.min.js"><\/script>')</script>
-						<script src="http://assets.volcanicpixels.com/js/common.js"></script>
+						<script>window.jQuery || document.write('<script src="{{ settings.asset_domain }}/js/jquery-{{ settings.jquery_version }}.min.js"><\/script>')</script>
+						<script src="{{ settings.asset_domain }}/js/common.js"></script>
 					{% endblock footer_scripts %}
+
+					<script type="text/javascript">
+						{% block inline_scripts %}
+						{% endblock inline_scripts %}
+					</script>
 				{% endblock body %}
 			</body>
 		{% endblock html %}

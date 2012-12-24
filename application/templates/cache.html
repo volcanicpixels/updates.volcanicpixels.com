@@ -1,0 +1,23 @@
+{% extends 'landing.html' %}
+{% import 'imports/settings.html' as settings %}
+
+{% block title %}Memcache | {{ super() }}{% endblock title %}
+
+{% block page_heading %}
+	Memcache Statistics
+{% endblock page_heading %}
+
+{% block content_inner %}
+	{% for key in memcache_stats %}
+		<div style="padding: 10px; display: inline-block;font-size: 23px; background-color:#F8F8F8;border:1px solid rgba(0, 0, 0, .2);">
+			<span style="font-weight: bold">{{ key }}</span>
+			<span>{{ memcache_stats[key] }}</span>
+		</div>
+	{% endfor %}
+	<div class="clear"></div>
+	<br/>
+	<a href="{{ url_for('cache',method='flush') }}">Flush Cache</a>
+{% endblock content_inner %}
+
+{% block service_info %}
+{% endblock service_info %}

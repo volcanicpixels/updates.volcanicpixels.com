@@ -1,0 +1,8 @@
+{% extends 'landing.html' %}
+{% import 'imports/settings.html' as settings %}
+
+{% block title %}Internal Error | {{ super() }}{% endblock title %}
+
+{% block page_heading %}
+	500. <br/>The server has exploded! Try hitting refresh - if that doesn't help then this is probably signs of the apocalypse.
+{% endblock page_heading %}

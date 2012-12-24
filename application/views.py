@@ -9,73 +9,35 @@ For example the *say_hello* handler, handling the URL route '/hello/<username>',
 
 """
 
-
 from google.appengine.api import users
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect
-
-from models import ExampleModel
-from decorators import login_required, admin_required
-from forms import ExampleForm
+from decorators import login_required, admin_required, cached
 
 from application import app
+from funcs import load_data
+
 
 @app.route( '/' )
+@cached
 def home():
-    return redirect(url_for('list_examples'))
+	return render_template('home.html')
 
 
-def say_hello(username):
-    """Contrived example to demonstrate Flask's url routing capabilities"""
-    return 'Hello %s' % username
+@app.route( '/api-docs/')
+def api_docs():
+	api = load_data('api.yaml')
+	return render_template('api_docs.html',api=api)
 
-
-@login_required
-def list_examples():
-    """List all examples"""
-    examples = ExampleModel.all()
-    form = ExampleForm()
-    if form.validate_on_submit():
-        example = ExampleModel(
-            example_name = form.example_name.data,
-            example_description = form.example_description.data,
-            added_by = users.get_current_user()
-        )
-        try:
-            example.put()
-            example_id = example.key().id()
-            flash(u'Example %s successfully saved.' % example_id, 'success')
-            return redirect(url_for('list_examples'))
-        except CapabilityDisabledError:
-            flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-            return redirect(url_for('list_examples'))
-    return render_template('list_examples.html', examples=examples, form=form)
-
-
-@login_required
-def delete_example(example_id):
-    """Delete an example object"""
-    example = ExampleModel.get_by_id(example_id)
-    try:
-        example.delete()
-        flash(u'Example %s successfully deleted.' % example_id, 'success')
-        return redirect(url_for('list_examples'))
-    except CapabilityDisabledError:
-        flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-        return redirect(url_for('list_examples'))
-
-
+@app.route( '/api-keys/')
 @admin_required
-def admin_only():
-    """This view requires an admin account"""
-    return 'Super-seekrit admin page.'
+def api_keys():
+	api_keys = load_data('api_keys.yaml')
+	return render_template('api_keys.html',api_keys=api_keys)
 
-
-def warmup():
-    """App Engine warmup handler
-    See http://code.google.com/appengine/docs/python/config/appconfig.html#Warming_Requests
-
-    """
-    return ''
+@app.route( '/api/' )
+@cached
+def api():
+	return redirect(url_for('api_docs'))
 

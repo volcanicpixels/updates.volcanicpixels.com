@@ -1,0 +1,83 @@
+- resource: api/products/
+  method: GET
+  description: List products
+  result:
+    description: "List of products, including meta data"
+    warning:
+     - The product_name may be empty or missing entirely.
+    expected:
+      - >
+        http/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+        [
+          {
+            "product_id": "private_blog",
+            "product_name": "Private Blog"
+          },
+          {
+            "product_id": "vp_typekit"
+          }
+        ]
+
+
+- resource: api/products/
+  protected: yes
+  method: POST
+  description: Create new product
+  parameters:
+    - name: product_id
+      description: The ID of the product. Must be unique and can only contain lowercase letters and underscores. If ommitted a random one will be assigned.
+    - name: product_name
+      description: The friendly name of the product e.g. "Private Blog"
+  result:
+    description: "The metadata for the created product."
+    warning:
+     - Creating a product using the same product_id as a recently deleted product may fail.
+    expected:
+      - >
+        http/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+
+        {
+          "product_id": "private_blog",
+          "product_name": "Private Blog"
+        }
+
+
+- resource: api/products/:product_id/
+  method: GET
+  description: Get product metadata
+  result:
+    description: The metadata for the product.
+    expected:
+      - >
+        http/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+
+        {
+          "product_id": "private_blog",
+          "product_name": "Private Blog"
+        }
+
+- resource: api/products/:product_id/
+  method: PUT
+  protected: yes
+  description: Update product metadata
+  paramaters:
+    - name: api_key
+      description: The Api key to authenticate the request
+  result:
+    description: The metadata for the updated product.
+    expected:
+      - >
+        http/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+
+        {
+          "product_id": "private_blog",
+          "product_name": "Private Blog"
+        }

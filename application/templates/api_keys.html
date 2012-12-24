@@ -1,0 +1,59 @@
+{% extends 'landing.html' %}
+{% import 'imports/settings.html' as settings %}
+
+{% block title %}Api Keys | {{ super() }}{% endblock title %}
+
+{% block page_heading %}
+	API Keys
+{% endblock page_heading %}
+
+{% block inline_styles %}
+	{{ super() }}
+	apicredentials {
+		display: block;
+	}
+
+	apicredentials:nth-child(2n-1) {
+		background: rgba(0,0,0,0.05);
+	}
+
+	apikey, apiuser {
+		padding: 10px;
+		display: inline-block;
+		font-size: 23px;
+	}
+
+	apikey {
+		cursor: pointer;
+	}
+
+	apiuser {
+		font-weight: bold;
+		width: 200px;
+		border-right: 1px solid rgba(0, 0, 0, .2);
+		text-align: right
+	}
+{% endblock inline_styles %}
+
+{% block footer_scripts %}
+	{{ super() }}
+	<script src="{{ settings.asset_domain }}/js/jquery.selecttext.js"></script>
+{% endblock footer_scripts %}
+
+{% block inline_scripts %}
+	{{ super() }}
+	jQuery(document).ready(function(){
+		jQuery('apikey').click(function(){
+			jQuery(this).selectText();
+		})
+	})
+{% endblock inline_scripts %}
+
+{% block content_inner %}
+	{% for api_key in api_keys %}
+		<apicredentials>
+			<apiuser>{{ api_keys[api_key] }}</apiuser>
+			<apikey title="Click to select">{{ api_key }}</apikey>
+		</apicredentials>
+	{% endfor %}
+{% endblock content_inner %}
