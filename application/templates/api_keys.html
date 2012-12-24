@@ -51,7 +51,7 @@
 
 {% block content_inner %}
 	{% for api_key in api_keys %}
-		<apicredentials>
+		<apicredentials class="align-center">
 			<apiuser>{{ api_keys[api_key] }}</apiuser>
 			<apikey title="Click to select">{{ api_key }}</apikey>
 		</apicredentials>

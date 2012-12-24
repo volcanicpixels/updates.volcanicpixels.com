@@ -10,6 +10,7 @@
 {% block footer_scripts %}
 	{{ super() }}
 	<script src="{{ settings.asset_domain }}/js/prism.js"></script>
+	<script src="{{ settings.asset_domain }}/js/jquery.sticky.js"></script>
 {% endblock footer_scripts %}
 
 {% block stylesheets %}
@@ -18,21 +19,24 @@
 {% endblock stylesheets %}
 
 {% block content_inner %}
-	{# navigation #}
 	<div class="vp-sidebar-padded">
-		<div class="vp-sidebar vp-sidebar-contents">
-			{% for api_method in api %}
-				<p><a href="#{{ api_method.description | slugify }}" class="vp-sidebar-item">{{ api_method.description }}</a></p>
-			{% endfor %}
+		<div class="vp-sidebar">
+			<div class="vp-sidebar-contents vp-sidebar-sticky">
+				<h3>Contents</h3>
+				{% for api_method in api %}
+					<p><a href="#{{ api_method.description | slugify }}" class="vp-sidebar-item">{{ api_method.description }}</a></p>
+				{% endfor %}
+			</div>
 		</div>
 		{% for api_method in api %}
-			<apimethod class="vp-api-method" id="{{ api_method.description | slugify }}">
+			<apimethod class="vp-api-method" >
+				<div id="{{ api_method.description | slugify }}" class="anchor"></div>
 				<h3 class="vp-api-title">{{ api_method.description }}</h3>
 				<dl>
 					{% if api_method.resource is defined %}
 						<dt>URL Structure</dt>
 						<dd>
-							<p>{{ api_method.resource }}</p>
+							<pre><code class="language-javascript">{{ api_method.resource }}</code></pre>
 						</dd>
 					{% endif %}
 					{% if api_method.method is defined %}
