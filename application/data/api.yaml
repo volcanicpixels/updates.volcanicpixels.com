@@ -3,8 +3,7 @@
   description: List products
   result:
     description: "List of products, including meta data"
-    warning:
-     - The product_name may be empty or missing entirely.
+    caution: The "product_name" may be empty or missing entirely.
     expected:
       - >
         http/1.1 200 OK
@@ -32,8 +31,7 @@
       description: The friendly name of the product e.g. "Private Blog"
   result:
     description: "The metadata for the created product."
-    warning:
-     - Creating a product using the same product_id as a recently deleted product may fail.
+    caution: Creating a product using the same "product_id" as a recently deleted product may fail.
     expected:
       - >
         http/1.1 200 OK

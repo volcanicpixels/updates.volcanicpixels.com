@@ -1,12 +1,108 @@
 {% extends 'landing.html' %}
 {% import 'imports/settings.html' as settings %}
 
-{% block title %}Api Documentation | {{ super() }}{% endblock title %}
+{% block title %}API Documentation | {{ super() }}{% endblock title %}
 
 {% block page_heading %}
 	API Documentation
 {% endblock page_heading %}
 
+{% block footer_scripts %}
+	{{ super() }}
+	<script src="{{ settings.asset_domain }}/js/prism.js"></script>
+{% endblock footer_scripts %}
+
+{% block stylesheets %}
+	{{ super() }}
+	<link rel="stylesheet" href="{{ settings.asset_domain }}/css/prism.css">
+{% endblock stylesheets %}
+
 {% block content_inner %}
-	
+	{# navigation #}
+	<div class="vp-sidebar-padded">
+		<div class="vp-sidebar vp-sidebar-contents">
+			{% for api_method in api %}
+				<p><a href="#{{ api_method.description | slugify }}" class="vp-sidebar-item">{{ api_method.description }}</a></p>
+			{% endfor %}
+		</div>
+		{% for api_method in api %}
+			<apimethod class="vp-api-method" id="{{ api_method.description | slugify }}">
+				<h3 class="vp-api-title">{{ api_method.description }}</h3>
+				<dl>
+					{% if api_method.resource is defined %}
+						<dt>URL Structure</dt>
+						<dd>
+							<p>{{ api_method.resource }}</p>
+						</dd>
+					{% endif %}
+					{% if api_method.method is defined %}
+						<dt>Method</dt>
+						<dd>
+							<p>{{ api_method.method }}</p>
+						</dd>
+					{% endif %}
+					{% if api_method.result is defined %}
+						<dt>Returns</dt>
+						<dd>
+							<p>{{ api_method.description }}</p>
+							{% if api_method.result.special is string %}
+								<p class="vp-inline-special">
+									{{ api_method.result.special }}
+								</p>
+							{% elif api_method.result.special is iterable %}
+								{% for special in api_method.result.special %}
+									<p class="vp-inline-warning">
+										{{ special }}
+									</p>
+								{% endfor %}
+							{% endif %}
+							{% if api_method.result.note is string %}
+								<p class="vp-inline-note">
+									{{ api_method.result.note }}
+								</p>
+							{% elif api_method.result.note is iterable %}
+								{% for note in api_method.result.note %}
+									<p class="vp-inline-note">
+										{{ note }}
+									</p>
+								{% endfor %}
+							{% endif %}
+							{% if api_method.result.caution is string %}
+								<p class="vp-inline-caution">
+									{{ api_method.result.caution }}
+								</p>
+							{% elif api_method.result.caution is iterable %}
+								{% for caution in api_method.result.caution %}
+									<p class="vp-inline-caution">
+										{{ caution }}
+									</p>
+								{% endfor %}
+							{% endif %}
+							{% if api_method.result.warning is string %}
+								<p class="vp-inline-warning">
+									{{ api_method.result.warning }}
+								</p>
+							{% elif api_method.result.warning is iterable %}
+								{% for warning in api_method.result.warning %}
+									<p class="vp-inline-warning">
+										{{ warning }}
+									</p>
+								{% endfor %}
+							{% endif %}
+
+							{% if api_method.result.expected is string %}
+								<pre class="vp-code-box"><code class="prism language-javascript">{{ api_method.result.expected }}</code></pre>
+							{% elif api_method.result.expected is iterable %}
+								{% for code in api_method.result.expected %}
+									<pre class="vp-code-box"><code class="prism language-javascript">{{ code }}</code></pre>
+								{% endfor %}
+							{% endif %}
+						</dd>
+
+
+					{% endif %}
+				</dl>
+			</apimethod>
+		{% endfor %}
+	</div>
 {% endblock content_inner %}
