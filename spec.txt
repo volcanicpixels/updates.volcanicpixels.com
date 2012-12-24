@@ -1,0 +1,165 @@
+Methods:
+	list_products:
+		select * products where hidden != true and return json
+	list_builds:
+
+	response:
+	list_channels:
+		- product_name
+		- installation_id
+		{
+			'channels': [
+				{
+					'channel_name': 'Stable Channel',
+					'channel_id': 'stable',
+					'channel_description': 'Updates are rolled out only after vigorous testing to minimize risk of an update which adversely affects a site.'
+				},
+				{
+					'channel_name': 'Rapid Release Channel',
+					'channel_id': 'rapid_release',
+					'channel_description': 'Updates are rolled out early and as a result there is an increased risk of an update which is unstable.'
+				},
+				{
+					'channel_name': 'Eric Pickles channel',
+					'channel_id': 'eric_pickles',
+					'channel_description': 'Custom channel includes extra food. Updates may be delayed to custom channels.'
+				}
+		}
+	upload_build:
+		product_id: private_blog
+		channel: distribution
+		version: 5.0.1
+		builder:
+			name: lofty
+			version: 1.1.2
+		uploaded_by: chatfielddaniel@gmail.com
+		[file]
+
+		most properties can be specified in plugin.yaml
+
+		returns a build object in json
+
+		Creates channel object if doesn't exist
+		If it does exist it makes sure it isn't an alias
+		Uploads to Google Storage
+		Creates build object
+		If there is no latest_build property then sets latest build property on channel
+
+
+
+	remove_build:
+		build_hash
+
+		returns success or failure
+
+	get_latest:
+		product_name: private_blog
+		channel: stable
+
+
+		{
+			'messages': [
+				{
+					'type': 'warning',
+					'code': 'no_channel'
+					'message': 'No channel specified - assumed stable.'
+				},
+				{
+					'type': 'error',
+					'message': 'invalid_channel',
+
+				}
+			],
+			'response': {
+				'product_name': 'Private Blog',
+				'product_id': 'private_blog',
+				'product_version': '6.0.1',
+				'built_on': '113823122012',
+				'built_by': {
+					'nickname': 'Daniel Chatfield',
+					'email': chatfielddaniel@gmail.com
+				},
+				'download_url': 'http://downloads.volcanicpixels.com/private_blog/6.0.1/private_blog.zip', # for all channels apart from stable this is same as persistent
+				'persistent_download_url': 'http://downloads.volcanicpixels.com/file_hash/private_blog-6.0.1-timestamp-a54d88e06612d820bc3be72877c74f257b561b19/private_blog.zip',
+				'secure_download_url': 'https://storage.googleapis.com/downloads.volcanicpixels.com/file_hash/private_blog-6.0.1-timestamp-a54d88e06612d820bc3be72877c74f257b561b19/private_blog.zip',
+				'authenticated_download_url': 'https://storage.cloud.google.com/downloads.volcanicpixels.com/file_hash/private_blog-6.0.1-timestamp-a54d88e06612d820bc3be72877c74f257b561b19/private_blog.zip',
+				'builder': {
+					'name': 'Lofty',
+					'version': '1.2.4'
+				}
+			}
+		}
+
+
+models:
+	products:
+		-product_name
+		-product_id
+	build:
+		-build_hash - file hash
+		-timestamp
+		-version
+		-builder name e.g. lofty
+		-product
+		-channel e.g. stable, rapid-release, sandbox
+		-size
+		-is_latest: # if true then this is the latest upload with this product and version (other meta data may be different)
+	channels:
+		-channel_name
+		-channel_id
+		-channel_description
+		-alias_for
+		-is_core
+		-is_custom
+		-is_favourite
+		-latest_build: #entity key for the build
+	settings:
+
+### Data:
+	product types e.g. plugin, theme (used for yaml definition files)
+
+#### Settings
+	Auto deploy
+
+
+#####
+	Display messages
+	 - based on channel
+	 - based on url
+	 - based on license
+
+
+######
+
+updates.volcanicpixels.com/api/check_for_update/
+	payload includes:
+	 - product_name
+	 - release_channel (default:stable)
+	 - current_product_version
+	 - wordpress_version
+
+
+
+
+updates.volcanicpixels.com/api/v1/ - lists products
+updates.volcanicpixels.com/api/v1/private_blog/ - lists channels
+updates.volcanicpixels.com/api/v1/private_blog/8q39eu/ - lists builds
+updates.volcanicpixels.com/api/v1/private_blog/8q39eu/jd983wvbnmtsq8emc93e2ic792c/ - lists build
+updates.volcanicpixels.com/api/v1/private_blog/8q39eu/latest/ - lists latest build
+
+
+
+New channel:
+	name: David Mahler Custom Channel
+	license: [search] david Mahler 	- licensing.volcanicpixels.com/api/v1/list_customers/?search=david%20m&api_key=a987sdty9a8sdy9asd789a8sd9as8
+									- licensing.volcanicpixels.com/api/v1/list_licenses/?customer=1005648464685&api_key=a987sdty9a8sdy9asd789a8sd9as8
+									- select license
+
+
+									- licensing.volcanicpixels.com/api/v1/list_licenses/?customer_search=david%20m&api_key=a987sdty9a8sdy9asd789a8sd9as8 # optimised api call
+	alias_for: # every customer has their own channel however it is likely that many customers will be following the same build, in this eventuality you should create a base channel and then make 'aliases' to that channel
+	build_following: select box with refresh icon next to it to select the build to follow
+	--loading--
+	latest_build: entity key for build
+
+

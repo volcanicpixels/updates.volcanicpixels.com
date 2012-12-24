@@ -145,6 +145,9 @@ var
 sdist
 develop-eggs
 .installed.cfg
+secret_keys.py
+application/secret_keys.py
+*secret_keys.py
 
 # Installer logs
 pip-log.txt

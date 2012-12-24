@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% import 'imports/settings.html' as settings %}
+
+{% block content %}
+	<section class="section">
+		<div class="container">
+			<h1 class="vp-large-heading">
+				{% block page_heading %}
+				{% endblock page_heading %}
+			</h1>
+			{% block service_info %}
+				<h2>If you are having issues or want more information regarding this service please <a href="mailto:{{ settings.admin_email }}">shoot me an email</a>.</h2>
+			{% endblock service_info %}
+		</div>
+	</section>
+{% endblock content %}

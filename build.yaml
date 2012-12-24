@@ -1,0 +1,39 @@
+build_name: David Mahler Build
+build_description: Adds an extension that redirects to login page when session expires.
+build_extends: # list of builds which this build is based on
+	- session_expiry
+	- multiple_passwords
+build_dirs:
+	- david_mahler
+
+
+delete_patterns:
+	- */less/*
+	- */coffee/*
+
+
+
+build_ignored: yes # if true then the build will not be shown in the admin panel and not auto-built on deploy
+
+"""
+For build_file in build_files:
+	Lib directory copied
+	parse_build_file :
+		check whether build has ancestors, if so parse them first
+		copy build_dirs
+
+	parse files with relevant extensions (txt, yaml, yml, php, html, twig, css)
+	foreach skin, extension check the supported version number if it hasn't been flagged then add a warning to return object
+	delete undesired directories (less, coffee etc.)
+	append data to plugin.yaml file
+		build_name
+		build_description
+		build_id
+	Zip file and send to updates server
+"""
+
+
+
+
+default.yaml - holds default values for new builds
+distribution.yaml

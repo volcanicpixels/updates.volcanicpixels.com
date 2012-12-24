@@ -1,0 +1,73 @@
+{% import 'imports/settings.html' as settings %}
+
+
+{% block html_cntr %}
+	<!DOCTYPE html>
+		{% block html %}
+		<!--[if lt IE 7]>	<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+		<!--[if IE 7]>	 <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+		<!--[if IE 8]>	 <html class="no-js lt-ie9"> <![endif]-->
+		<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+			{% block head_cntr %}
+				<head>
+					{% block head %}
+						<meta charset="utf-8">
+						<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+						<title>{% block title %}{{ settings.title }}{% endblock title %}</title>
+						<meta name="description" content="{% block description %}{{ settings.title }}{% endblock description %}">
+						<meta name="viewport" content="width=device-width">
+
+						{% block stylesheets %}
+							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/reset.css">
+							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/common.css">
+							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/landing.css">
+						{% endblock stylesheets %}
+
+						{% block scripts %}
+							<script src="http://assets.volcanicpixels.com/js/modernizr-{{ settings.modernizr_version }}.min.js"></script>
+							<script type="text/javascript" src="//use.typekit.net/{{ settings.typekit_id }}.js"></script>
+							<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+						{% endblock scripts %}
+					{% endblock head %}
+				</head>
+			{% endblock head_cntr %}
+			<body class="tk-freight-sans-pro">
+				{% block body %}
+					{% block chromeframe %}
+						<!--[if lt IE 7]>
+								<div class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</div>
+						<![endif]-->
+					{% endblock chromeframe %}
+					{% block flash_message %}
+						{% include 'includes/flash_message.html' %} {# page-level feedback notices #}
+					{% endblock flash_message %}
+
+					{% block page %}
+						{% block header %}
+							<section class="section section-header">
+								<div class="container">
+									<div class="vp-logo">
+										<a href="{{ url_for('home') }}" rel="home">
+											<span>{{ settings.logo_first}}</span><span> {{ settings.logo_second }}</span>
+										</a>
+									</div>
+								</div>
+							</section>
+						{% endblock header %}
+
+						{% block content %}
+						{% endblock content %}
+
+						{% block footer %}
+						{% endblock footer %}
+					{% endblock page %}
+					{% block footer_scripts %}
+						<script src="//ajax.googleapis.com/ajax/libs/jquery/{{ settings.jquery_version }}/jquery.min.js"></script>
+						<script>window.jQuery || document.write('<script src="//assets.volcanicpixels.com/js/jquery-{{ settings.jquery_version }}.min.js"><\/script>')</script>
+						<script src="http://assets.volcanicpixels.com/js/common.js"></script>
+					{% endblock footer_scripts %}
+				{% endblock body %}
+			</body>
+		{% endblock html %}
+	</html>
+{% endblock html_cntr %}
