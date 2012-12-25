@@ -24,14 +24,16 @@ from funcs import load_data
 def home():
 	return render_template('home.html')
 
-
 @app.route( '/api-docs/')
+@cached
 def api_docs():
 	api = load_data('api.yaml')
 	return render_template('api_docs.html',api=api)
 
+
 @app.route( '/api-keys/')
 @admin_required
+@cached
 def api_keys():
 	api_keys = load_data('api_keys.yaml')
 	return render_template('api_keys.html',api_keys=api_keys)

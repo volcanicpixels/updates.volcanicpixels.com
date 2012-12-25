@@ -16,11 +16,13 @@
 						<title>{% block title %}{{ settings.title }}{% endblock title %}</title>
 						<meta name="description" content="{% block description %}{{ settings.title }}{% endblock description %}">
 						<meta name="viewport" content="width=device-width">
+						<link rel="canonical" href="{{ settings.canonical_domain }}{{ canonical_path | default( request.path ) }}"/>
 
 						{% block stylesheets %}
 							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/reset.css">
 							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/common.css">
 							<link rel="stylesheet" href="{{ settings.asset_domain }}/css/landing.css">
+							<link rel="stylesheet" href="{{ settings.asset_domain }}/webfonts/ss-standard.css" />
 						{% endblock stylesheets %}
 						<style type="text/css">
 							{% block inline_styles %}
@@ -50,6 +52,9 @@
 						{% block header %}
 							<section class="section section-header">
 								<div class="container">
+									{% block parent_link_cntr %}
+										<a class="vp-btn-header button-left" href="{{ parent_link_url | default(url_for('home')) }}">{{ parent_link_url | default('Homepage') }}</a>
+									{% endblock parent_link_cntr %}
 									<div class="vp-logo">
 										<a href="{{ url_for('home') }}" rel="home">
 											<span>{{ settings.logo_first}}</span><span> {{ settings.logo_second }}</span>

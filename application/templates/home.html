@@ -1,8 +1,25 @@
-{% extends 'landing.html' %}
+{% extends 'page.html' %}
 {% import 'imports/settings.html' as settings %}
 
 {% block title %}Home | {{ super() }}{% endblock title %}
 
-{% block page_heading %}
-	This domain is responsible for delivering updates for the <a href="http://www.volcanicpixels.com">Volcanic Pixels</a> network using <a href="https://cloud.google.com/products/appengine.html">Google App Engine</a> and the <a href="http://downloads.volcanicpixels.com/">Volcanic Pixels Download Server</a>.
-{% endblock page_heading %}
+{% block parent_link_cntr %}
+{% endblock parent_link_cntr %}
+
+{% block page_heading_cntr %}
+	<h1 class="align-justify home-title">
+		This domain is responsible for delivering updates for the <a href="http://www.volcanicpixels.com">Volcanic Pixels</a> network using <a href="https://cloud.google.com/products/appengine.html">Google App Engine</a> and the <a href="http://downloads.volcanicpixels.com/">Volcanic Pixels Download Server</a>.
+	</h1>
+{% endblock page_heading_cntr %}
+
+{% block content_inner %}
+	{# Link to api documentation #}
+	<div class="vertical-padding-medium align-center">
+		<a class="vp-btn-landing-action with-icon ss-openbook" href="{{ url_for('api_docs') }}">Browse the API docs</a>
+		<a class="vp-btn-landing-action btn-disabled with-icon ss-download" href="">Check for update</a>
+		<a class="vp-btn-landing-action btn-disabled with-icon ss-layout" href="">Admin console</a>
+		<a class="vp-btn-landing-action with-icon ss-dashboard" href="{{ url_for('cache') }}">View cache stats</a>
+		<a class="vp-btn-landing-action with-icon ss-transfer" href="{{ url_for('api_keys') }}">View API keys</a>
+	</div>
+	
+{% endblock content_inner %}

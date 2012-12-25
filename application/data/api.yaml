@@ -64,9 +64,9 @@
   resource: api/products/:product_id/
   method: PUT
   protected: yes
-  paramaters:
+  parameters:
     - name: api_key
-      description: The Api key to authenticate the request
+      required: yes
   result:
     description: The metadata for the updated product.
     expected:
@@ -79,3 +79,59 @@
           "product_id": "private_blog",
           "product_name": "Private Blog"
         }
+
+- description: List Channels
+  resource: api/channels/
+  method: GET
+  parameters:
+    - name: api_key
+      required: no
+    - name: product_id
+      required: no
+      description: The id of the product to list the channels for.
+      special: If using an api_key this can be ommited (displays channels for every product).
+    - name: license_key
+      required: no
+      special: A license key is required to retrieve custom channels which are only available to certain customers.
+  result:
+    description: "List of channels, including meta data"
+    caution: The "channel_name", "channel_description", "alias_for", "is_core", "is_alias", "is_favourite" and "active_build" fields may be empty or mising entirely.
+    expected:
+      - >
+        http/1.1 200 OK
+        Content-Type: application/json; charset=utf-8
+
+
+        [
+          {
+            "channel_id": "stable",
+            "channel_name": "Stable Channel",
+            "channel_description": "Updates are pushed only when thoroughly tested to minimize risk of an update which adversely affects a site.",
+            "product": "private_blog",
+            "is_core": true,
+            "is_alias":  false,
+            "is_favourite": false,
+            "active_build": "7rxwO2vRik93do5mdiep91500M29xCMJ"
+          },
+          {
+            "channel_id": "development",
+            "channel_name": "Development Channel",
+            "channel_description": "Updates are pushed early in the development cycle, being on the bleeding edge means that there is an increased risk of instability.",
+            "product": "private_blog",
+            "is_core": true,
+            "is_alias":  false,
+            "is_favourite": false,
+            "active_build": "2vRik93do5mdiep91500M29xCMJ7rxwO"
+          },
+          {
+            "channel_id": "d_mahler",
+            "channel_name": "David Mahler Custom Channel",
+            "customer_id": "93do5mdiep91500M29xCMJ7rxwO2vRik",
+            "product": "private_blog",
+            "is_core": false,
+            "is_alias":  true,
+            "alias_for": "development",
+            "is_favourite": true,
+            "active_build": "91500M29xCMJ7rxwO2vRik93do5mdiep"
+          }
+        ]

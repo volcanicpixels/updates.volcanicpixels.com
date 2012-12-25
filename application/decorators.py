@@ -8,7 +8,7 @@ Decorators for URL handlers
 from functools import wraps
 from google.appengine.api import users, memcache
 from flask import make_response, redirect, request, abort
-from settings import CACHE_TIMEOUT
+from settings import CACHE_TIMEOUT, CACHE_ENABLED
 
 
 def login_required(func):
@@ -46,12 +46,15 @@ def cached(func,timeout=None):
 		timeout = CACHE_TIMEOUT
 	@wraps(func)
 	def decorated_view(*args, **kwargs):
-		response = memcache.get(request.path,namespace='response_cache')
-		if response is None:
-			response = make_response(func(*args, **kwargs))
-			memcache.add(request.path, response, timeout,namespace='response_cache')
-			response.headers.add('Added-To-Cache',request.path)
+		if not CACHE_ENABLED:
+			return func(*args, **kwargs)
 		else:
-			response.headers.add('From-Cache',request.path)
-		return response
+			response = memcache.get(request.path,namespace='response_cache')
+			if response is None:
+				response = make_response(func(*args, **kwargs))
+				memcache.add(request.path, response, timeout,namespace='response_cache')
+				response.headers.add('Added-To-Cache',request.path)
+			else:
+				response.headers.add('From-Cache',request.path)
+			return response
 	return decorated_view

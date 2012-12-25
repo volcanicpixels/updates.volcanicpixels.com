@@ -17,6 +17,7 @@ class Channel(db.model):
 	channel_id = db.StringProperty(required=True)
 	channel_name = db.StringProperty()
 	channel_description = db.StringProperty()
+	product = db.ReferenceProperty(reference_class=Product)
 	alias_for = db.SelfReferenceProperty(collection_name='alias_channels')
 	is_core = db.BooleanProperty(default=False,required=True)
 	is_alias = db.BooleanProperty(default=False,required=True)
