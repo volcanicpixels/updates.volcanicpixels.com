@@ -1,4 +1,5 @@
 - description: List products
+  note: This may not return a complete list of products or may include products for which the update server does not provide updates for.
   resource: api/products/
   method: GET
   result:

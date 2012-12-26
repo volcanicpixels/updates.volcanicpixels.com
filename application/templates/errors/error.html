@@ -1,0 +1,16 @@
+{% extends 'page.html' %}
+{% import 'imports/settings.html' as settings %}
+
+{% block title %}Not found | {{ super() }}{% endblock title %}
+
+{% block page_heading_cntr %}
+	<h1 class="align-left error-title">
+		{% block page_heading %}
+			An error has occured.
+		{% endblock %}
+	</h1>
+{% endblock page_heading_cntr %}
+
+
+{% block page_anchor %}
+{% endblock page_anchor %}

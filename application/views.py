@@ -3,13 +3,9 @@ views.py
 
 URL route handlers
 
-Note that any handler params must match the URL route params.
-For example the *say_hello* handler, handling the URL route '/hello/<username>',
-  must be passed *username* as the argument.
-
 """
 
-from google.appengine.api import users
+from google.appengine.api import users, memcache
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect
@@ -17,6 +13,12 @@ from decorators import login_required, admin_required, cached
 
 from application import app
 from funcs import load_data
+
+
+
+"""
+Public views
+"""
 
 
 @app.route( '/' )
@@ -31,15 +33,65 @@ def api_docs():
 	return render_template('api_docs.html',api=api)
 
 
+
+"""
+Admin views
+"""
+
+
 @app.route( '/api-keys/')
 @admin_required
 @cached
 def api_keys():
 	api_keys = load_data('api_keys.yaml')
 	return render_template('api_keys.html',api_keys=api_keys)
+	
+# Flushes the page cache
+@app.route('/cache/')
+@app.route('/cache/<method>')
+@admin_required
+def cache(method=None):
+	if method == 'flush':
+		if memcache.flush_all():
+			flash('Cache successfully flushed.', 'success')
+		else:
+			flash('Cache could not be flushed.', 'error')
+		return redirect(url_for('cache'))
+	memcache_stats = memcache.get_stats()
+	return render_template('cache.html',memcache_stats=memcache_stats)
 
-@app.route( '/api/' )
+"""
+Error views
+"""
+
 @cached
-def api():
-	return redirect(url_for('api_docs'))
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('/errors/not_found.html'), 404
 
+# Handle 500 errors
+@app.errorhandler(500)
+def server_error(e):
+	return render_template('/errors/internal_error.html'), 500
+
+
+# Handle 405 errors
+@cached
+@app.errorhandler(405)
+def server_error(e):
+	return render_template('/errors/method_not_allowed.html'), 500
+
+
+"""
+System views
+"""
+
+# App Engine warm up handler
+# See http://code.google.com/appengine/docs/python/config/appconfig.html#Warming_Requests
+@app.route('/_ah/warmup')
+def warmup():
+	"""App Engine warmup handler
+	See http://code.google.com/appengine/docs/python/config/appconfig.html#Warming_Requests
+
+	"""
+	return ''

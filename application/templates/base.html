@@ -40,7 +40,7 @@
 			<body class="tk-freight-sans-pro">
 				{% block body %}
 					{% block chromeframe %}
-						<!--[if lt IE 7]>
+						<!--[if lte IE 8]>
 								<div class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</div>
 						<![endif]-->
 					{% endblock chromeframe %}
@@ -55,11 +55,15 @@
 									{% block parent_link_cntr %}
 										<a class="vp-btn-header button-left" href="{{ parent_link_url | default(url_for('home')) }}">{{ parent_link_url | default('Homepage') }}</a>
 									{% endblock parent_link_cntr %}
-									<div class="vp-logo">
-										<a href="{{ url_for('home') }}" rel="home">
-											<span>{{ settings.logo_first}}</span><span> {{ settings.logo_second }}</span>
-										</a>
-									</div>
+									{% if request.path != url_for('home') %}
+									<a href="{{ url_for('home') }}" rel="home">
+									{% endif %}
+										<div class="vp-logo">
+												<span>{{ settings.logo_first}}</span><span> {{ settings.logo_second }}</span>
+										</div>
+									{% if request.path != url_for('home') %}
+									</a>
+									{% endif %}
 								</div>
 							</section>
 						{% endblock header %}
@@ -71,6 +75,7 @@
 						{% endblock footer %}
 					{% endblock page %}
 					{% block footer_scripts %}
+						<script src="{{ settings.asset_domain }}/webfonts/ss-standard.js"></script>
 						<script src="//ajax.googleapis.com/ajax/libs/jquery/{{ settings.jquery_version }}/jquery.min.js"></script>
 						<script>window.jQuery || document.write('<script src="{{ settings.asset_domain }}/js/jquery-{{ settings.jquery_version }}.min.js"><\/script>')</script>
 						<script src="{{ settings.asset_domain }}/js/common.js"></script>

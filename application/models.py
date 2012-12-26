@@ -12,7 +12,7 @@ class Product(db.Model):
 	product_id = db.StringProperty(required=True)
 	product_name = db.StringProperty()
 
-class Channel(db.model):
+class Channel(db.Model):
 	# the channel id is either a root channel id e.g. 'stable' or a randomly generated alias id e.g. '9sd3jk'
 	channel_id = db.StringProperty(required=True)
 	channel_name = db.StringProperty()

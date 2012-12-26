@@ -7,7 +7,7 @@ Decorators for URL handlers
 
 from functools import wraps
 from google.appengine.api import users, memcache
-from flask import make_response, redirect, request, abort
+from flask import make_response, redirect, request, abort, jsonify
 from settings import CACHE_TIMEOUT, CACHE_ENABLED
 
 
@@ -37,7 +37,7 @@ def api_key_required(func):
 	"""Requires Volcanic Pixels API key"""
 	@wraps(func)
 	def decorated_view(*args, **kwargs):
-		pass
+		return func(*args,**kwargs)
 	return decorated_view
 
 def cached(func,timeout=None):
@@ -57,4 +57,16 @@ def cached(func,timeout=None):
 			else:
 				response.headers.add('From-Cache',request.path)
 			return response
+	return decorated_view
+
+
+def json_response(func):
+	"""Makes the response a json string"""
+	@wraps(func)
+	def decorated_view(*args, **kwargs):
+		data = func(*args, **kwargs)
+		if data is None:
+			return jsonify()
+		else:
+			return jsonify(**data)
 	return decorated_view
