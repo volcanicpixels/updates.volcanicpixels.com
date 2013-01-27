@@ -43,7 +43,7 @@ Methods:
 		If it does exist it makes sure it isn't an alias
 		Uploads to Google Storage
 		Creates build object
-		If there is no latest_build property then sets latest build property on channel
+		If there is no active_build property then sets latest build property on channel
 
 
 
@@ -161,5 +161,44 @@ New channel:
 	build_following: select box with refresh icon next to it to select the build to follow
 	--loading--
 	latest_build: entity key for build
+
+
+
+
+builds/
+
+stable.yaml
+beta.yaml
+
+
+extends:
+ - stable
+ - beta
+ - development
+
+ development - always latest build
+ beta - new build is promoted to 'beta' if all extensions and skins have a beta tag that matches the version number
+
+ stable - new build is promoted to 'stable' if all extensions and skins have a stable tag that matches version number (user confirmation is required to update active_build)
+
+ extenion.yaml
+ 	name: Session Expiry
+ 	premium: true
+ 	beta: 5.3.x
+ 	stable: 5.6.1
+
+
+development workflow:
+	Make change
+	Build plugin
+	Check plugin
+	Git push
+	go to update server
+	Build all - check warnings (warnings occur if remote build hashes do not match)
+	 -- building 2/14 channels
+	Channels built
+	 -- Update beta and stable builds?
+	   -- checkbox next to all
+	   -- publish all
 
 

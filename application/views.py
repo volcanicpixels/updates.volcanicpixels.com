@@ -26,6 +26,9 @@ Public views
 def home():
 	return render_template('home.html')
 
+
+
+
 @app.route( '/api-docs/')
 @cached
 def api_docs():

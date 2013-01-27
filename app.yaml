@@ -9,6 +9,11 @@ threadsafe: yes
 
 handlers:
 
+# if under heavy load enable this
+#- url: /
+#  static_files: static_pages/landing.html
+#  upload: static_pages/landing.html
+
 - url: /favicon.ico
   static_files: application/static/img/favicon.ico
   upload: application/static/img/favicon.ico
@@ -21,11 +26,19 @@ handlers:
   static_files: application/static/mu-84c1db53-b95e408f-a1aa8605-55acbf1b.txt
   upload: application/static/mu-84c1db53-b95e408f-a1aa8605-55acbf1b.txt
 
+- url: /loaderio-7e76810b1efdcc6032928171f101b771.txt
+  static_files: application/static/loaderio-7e76810b1efdcc6032928171f101b771.txt
+  upload: application/static/loaderio-7e76810b1efdcc6032928171f101b771.txt
+
 - url: /_gae_mini_profiler/static
   static_dir: flaskext/gae_mini_profiler/static
 
 - url: /static
   static_dir: application/static
+
+- url: /admin/.*
+  login: admin
+  script: application.app
 
 - url: .*
   script: application.app
@@ -46,7 +59,7 @@ libraries:
 
 
 builtins:
-- appstats: on
+# - appstats: on
 - remote_api: on
 - deferred: on
 
@@ -64,3 +77,8 @@ error_handlers:
   file: error_pages/dos_api_denial.html
 - error_code: timeout
   file: error_pages/timeout.html
+
+admin_console:
+  pages:
+  - name: Cache stats
+    url: /cache/

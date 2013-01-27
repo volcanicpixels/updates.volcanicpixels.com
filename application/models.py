@@ -6,34 +6,38 @@ App Engine datastore models
 """
 
 
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
-class Product(db.Model):
-	product_id = db.StringProperty(required=True)
-	product_name = db.StringProperty()
+class Product(ndb.Model):
+	product_id = ndb.StringProperty(required=True)
+	product_name = ndb.StringProperty()
 
-class Channel(db.Model):
+class Branch(ndb.Model):
 	# the channel id is either a root channel id e.g. 'stable' or a randomly generated alias id e.g. '9sd3jk'
-	channel_id = db.StringProperty(required=True)
-	channel_name = db.StringProperty()
-	channel_description = db.StringProperty()
-	product = db.ReferenceProperty(reference_class=Product)
-	alias_for = db.SelfReferenceProperty(collection_name='alias_channels')
-	is_core = db.BooleanProperty(default=False,required=True)
-	is_alias = db.BooleanProperty(default=False,required=True)
-	is_favourite = db.BooleanProperty(default=False,required=True)
-	active_build = db.ReferenceProperty() # left blank to get around circular reference problem
+	branch_id = ndb.StringProperty(required=True)
+	branch_name = ndb.StringProperty()
+	branch_description = ndb.StringProperty()
+	product = ndb.KeyProperty(kind=Product)
+	alias_for = ndb.KeyProperty(kind="Branch")
+	is_core = ndb.BooleanProperty(default=False)
+	is_alias = ndb.BooleanProperty(default=False)
+	is_favourite = ndb.BooleanProperty(default=False)
+	stable_build = ndb.KeyProperty(kind='Build') # left blank to get around circular reference problem
+	beta_build = ndb.KeyProperty(kind='Build') # left blank to get around circular reference problem
+	development_build = ndb.KeyProperty(kind='Build') # left blank to get around circular reference problem
 
 
-class Build(db.Model):
-	build_hash = db.StringProperty(required=True)
-	uploaded_on = db.DateTimeProperty(auto_now_add=True)
-	product = db.ReferenceProperty(reference_class=Product)
-	product_version = db.StringProperty(required=True) # must be in format 6.5.12 (translates to: 000600050012)
-	product_version_int = db.IntegerProperty(required=True)
-	product_version_x = db.IntegerProperty(required=True) # used so you can get all builds within a major version
-	product_version_y = db.IntegerProperty(required=True)
-	product_version_z = db.IntegerProperty(required=True)
-	channel = db.ReferenceProperty(reference_class=Channel)
-	uploaded_by = db.StringProperty(default='Unspecified 0.0.0')
-	is_active = db.BooleanProperty(required=True,default=False)
+class Build(ndb.Model):
+	build_hash = ndb.StringProperty(required=True)
+	uploaded_on = ndb.DateTimeProperty(auto_now_add=True)
+	product = ndb.KeyProperty(kind=Product)
+	product_version = ndb.StringProperty(required=True) # must be in format 6.5.12 (translates to: 000600050012)
+	product_version_int = ndb.IntegerProperty(required=True)
+	product_version_x = ndb.IntegerProperty(required=True) # used so you can get all builds within a major version
+	product_version_y = ndb.IntegerProperty(required=True)
+	product_version_z = ndb.IntegerProperty(required=True)
+	branch = ndb.KeyProperty(kind=Branch)
+	uploaded_by = ndb.StringProperty(default='Unspecified 0.0.0')
+	is_stable = ndb.BooleanProperty(default=False)
+	is_beta = ndb.BooleanProperty(default=False)
+	is_development = ndb.BooleanProperty(default=True)

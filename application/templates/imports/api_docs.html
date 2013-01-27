@@ -1,28 +1,28 @@
 
 
-{% macro inline_note(text,type="note",default_text="Undefined message") %}
-	{% if text %}
-		{% if text is defined %}
-			{% if text == True %}
-				{% set text = default_text %}
-			{% endif %}
+{%- macro inline_note(text,type="note",default_text="Undefined message") -%}
+	{%- if text -%}
+		{%- if text is defined -%}
+			{%- if text == True -%}
+				{%- set text = default_text -%}
+			{%- endif -%}
 			<p class="vp-inline-{{ type }}">
 				{{ text }}
 			</p>
-		{% endif %}
-	{% endif %}
-{% endmacro %}
+		{%- endif -%}
+	{%- endif -%}
+{%- endmacro -%}
 
 
-{% macro inline_notes(object) %}
-	{% set note_types = ['special','note','caution','warning'] %}
-	{% for note_type in note_types %}
-		{% if object[note_type] is string %}
+{%- macro inline_notes(object) -%}
+	{%- set note_types = ['special','note','caution','warning'] -%}
+	{%- for note_type in note_types -%}
+		{%- if object[note_type] is string -%}
 			{{ inline_note(object[note_type],note_type)}}
-		{% elif object[note_type] is iterable %}
-			{% for note in object[note_type] %}
+		{%- elif object[note_type] is iterable -%}
+			{%- for note in object[note_type] -%}
 				{{ inline_note(object[note_type],note_type)}}
-			{% endfor %}
-		{% endif %}
-	{% endfor %}
-{% endmacro %}
+			{%- endfor -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endmacro -%}

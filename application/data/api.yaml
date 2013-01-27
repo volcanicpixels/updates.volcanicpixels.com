@@ -1,7 +1,22 @@
+#
+# About the api:
+# API Clients
+#
+#
+# Products:
+# branches:
+# Builds
+#
+
+
+
 - description: List products
   note: This may not return a complete list of products or may include products for which the update server does not provide updates for.
   resource: api/products/
   method: GET
+  parameters:
+   - name: start_token
+     description: Used to get the next page of results.
   result:
     description: "List of products, including meta data"
     caution: The "product_name" may be empty or missing entirely.
@@ -10,15 +25,22 @@
         http/1.1 200 OK
         Content-Type: application/json; charset=utf-8
 
-        [
-          {
-            "product_id": "private_blog",
-            "product_name": "Private Blog"
-          },
-          {
-            "product_id": "vp_typekit"
-          }
-        ]
+        {
+            "kind": "updates.volcanicpixels.com#productList",
+            "totalItems": 2,
+            "itemsPerPage": 100,
+            "nextPageToken": 'E-ABAIICK2oaZGV2fnZvbGNhbmljcGl4ZWxzLXVwZGF0ZXNyDQsSB1Byb2R1Y3QYCAwU',
+            "items": [
+                {
+                    "product_id": "test2",
+                    "product_name": "bob the builder"
+                },
+                {
+                    "product_id": "private_blog",
+                    "product_name": "Private Blog"
+                }
+            ],
+        }
 
 
 - description: Create product
@@ -26,8 +48,10 @@
   protected: yes
   method: POST
   parameters:
+    - name: api_key
+      required: yes
     - name: product_id
-      description: The ID of the product. Must be unique and can only contain lowercase letters and underscores. If ommitted a random one will be assigned.
+      description: The ID of the product. Must be unique and contain at least 3 lowercase letters or underscores. If ommitted a random one will be assigned.
     - name: product_name
       description: The friendly name of the product e.g. "Private Blog"
   result:
@@ -44,6 +68,9 @@
           "product_name": "Private Blog"
         }
 
+- description: Delete Product
+  resource: api/products/:product_id/
+  method: DELETE
 
 - description: Get product
   resource: api/products/:product_id/
@@ -81,22 +108,22 @@
           "product_name": "Private Blog"
         }
 
-- description: List Channels
-  resource: api/channels/
+- description: List Branches
+  resource: api/bracnhes/
   method: GET
   parameters:
     - name: api_key
       required: no
     - name: product_id
       required: no
-      description: The id of the product to list the channels for.
-      special: If using an api_key this can be ommited (displays channels for every product).
+      description: The id of the product to list the bracnhes for.
+      special: If using an api_key this can be ommited (displays bracnhes for every product).
     - name: license_key
       required: no
-      special: A license key is required to retrieve custom channels which are only available to certain customers.
+      special: A license key is required to retrieve custom bracnhes which are only available to certain customers.
   result:
-    description: "List of channels, including meta data"
-    caution: The "channel_name", "channel_description", "alias_for", "is_core", "is_alias", "is_favourite" and "active_build" fields may be empty or mising entirely.
+    description: "List of bracnhes, including meta data"
+    caution: The "branch_name", "branch_description", "alias_for", "is_core", "is_alias", "is_favourite" and "active_build" fields may be empty or mising entirely.
     expected:
       - >
         http/1.1 200 OK
@@ -105,9 +132,9 @@
 
         [
           {
-            "channel_id": "stable",
-            "channel_name": "Stable Channel",
-            "channel_description": "Updates are pushed only when thoroughly tested to minimize risk of an update which adversely affects a site.",
+            "branch_id": "stable",
+            "branch_name": "Stable branch",
+            "branch_description": "Updates are pushed only when thoroughly tested to minimize risk of an update which adversely affects a site.",
             "product": "private_blog",
             "is_core": true,
             "is_alias":  false,
@@ -115,9 +142,9 @@
             "active_build": "7rxwO2vRik93do5mdiep91500M29xCMJ"
           },
           {
-            "channel_id": "development",
-            "channel_name": "Development Channel",
-            "channel_description": "Updates are pushed early in the development cycle, being on the bleeding edge means that there is an increased risk of instability.",
+            "branch_id": "development",
+            "branch_name": "Development branch",
+            "branch_description": "Updates are pushed early in the development cycle, being on the bleeding edge means that there is an increased risk of instability.",
             "product": "private_blog",
             "is_core": true,
             "is_alias":  false,
@@ -125,8 +152,8 @@
             "active_build": "2vRik93do5mdiep91500M29xCMJ7rxwO"
           },
           {
-            "channel_id": "d_mahler",
-            "channel_name": "David Mahler Custom Channel",
+            "branch_id": "d_mahler",
+            "branch_name": "David Mahler Custom branch",
             "customer_id": "93do5mdiep91500M29xCMJ7rxwO2vRik",
             "product": "private_blog",
             "is_core": false,

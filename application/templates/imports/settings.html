@@ -10,3 +10,10 @@
 {% set typekit_id = 'xds7tli' %}
 {% set asset_domain = 'http://assets.volcanicpixels.com' %}
 {% set canonical_domain = 'http://updates.volcanicpixels.com' %}
+
+{% set google_analytics_id = 'UA-29306585-3' %}
+
+
+{% if request.url is secure() %}
+	{% set asset_domain = 'https://commondatastorage.googleapis.com/assets.volcanicpixels.com' %}
+{% endif %}

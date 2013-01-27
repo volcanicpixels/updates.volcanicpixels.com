@@ -13,7 +13,7 @@ import os
 from secret_keys import CSRF_SECRET_KEY, SESSION_KEY
 
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 CACHE_ENABLED = True
 
 # Auto-set debug mode based on App Engine dev environ
